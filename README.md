@@ -14,7 +14,25 @@ The objective of this analysis is to provide visibility into key operational are
 
 The analysis consolidates multiple operational datasets to support **data-driven decision-making for restaurant management**.
 
-All **data cleaning, transformation, aggregation, and metric calculations were performed using SQL** before importing the final analytical tables into Power BI for dashboard visualization.
+All **data cleaning, transformation, aggregation, and metric calculations were performed using SQL Server** before importing the final analytical tables into Power BI for dashboard visualization.
+
+---
+
+# Data Pipeline Architecture
+
+The analytical workflow follows a **SQL-first architecture**, where raw operational data is transformed using SQL before being visualized in Power BI.
+
+![Data Pipeline](images/data_pipeline.png)
+
+Pipeline flow:
+
+Raw Operational Tables  
+↓  
+SQL Data Preparation  
+↓  
+Analytical SQL Views  
+↓  
+Power BI Dashboard
 
 ---
 
@@ -30,37 +48,80 @@ Without a centralized analytical view, management teams struggle to answer key o
 - How efficiently is inventory being utilized?
 - How are labor hours and costs distributed across staff members?
 
-This project addresses these challenges by creating a **centralized operational analytics dashboard** that integrates sales, inventory, and workforce data.
+This project addresses these challenges by creating a **centralized operational analytics solution** integrating sales, inventory, and workforce data.
 
 ---
 
-# Analytical Approach
+# Data Preparation and SQL Modeling
 
-The analysis followed four main stages.
-
-## 1. Data Preparation (SQL)
-
-All data preparation and transformation steps were performed using **SQL Server**.
+All transformations and calculations were performed in **SQL Server**.
 
 Key tasks included:
 
-- Cleaning raw transactional datasets
-- Creating relational joins across operational tables
-- Aggregating sales and order data
-- Calculating ingredient usage per order
+- Joining operational tables
+- Aggregating transactional order data
+- Calculating ingredient usage per product
 - Computing production cost per menu item
-- Calculating inventory consumption and remaining stock
-- Aggregating labor hours and staff costs
+- Monitoring remaining inventory
+- Calculating staff labor hours and costs
 
-SQL views and queries were used to create analytical tables that feed the final dashboard.
+SQL views were created to generate analytical datasets used in the final dashboard.
 
-Example analysis included:
+### Example SQL Logic
 
-- Sales aggregation by product and hour
-- Ingredient consumption per order
-- Cost-per-pizza calculations
-- Inventory remaining calculations
-- Staff hours and labor cost analysis
+![SQL Code](images/sql_code_logic.png)
+
+---
+
+# Example SQL Output
+
+Example output from one of the analytical views used for reporting.
+
+![SQL Output](images/sql_sales_view_output.png)
+
+---
+
+# Analytical SQL Views Created
+
+The following SQL views power the dashboard:
+
+### orders_dashboard
+Centralized sales dataset including:
+
+- Order ID
+- Item price
+- Quantity
+- Category
+- Item name
+- Order timestamp
+- Delivery location
+
+### stock1
+Calculates ingredient consumption per product order.
+
+Includes:
+
+- ingredient usage
+- unit ingredient cost
+- production cost per order
+
+### remaining_inventory
+Tracks remaining ingredient inventory after production.
+
+Includes:
+
+- total ingredient weight
+- consumed ingredient weight
+- remaining stock
+
+### staff_cost
+Calculates labor hours and staff cost.
+
+Includes:
+
+- shift duration
+- staff hourly rate
+- labor cost per shift
 
 ---
 
@@ -68,8 +129,8 @@ Example analysis included:
 
 Primary Tools:
 
-- **SQL Server** — data cleaning, transformation, and analysis
-- **Power BI** — dashboard visualization and reporting
+- SQL Server — data cleaning, transformation, analysis
+- Power BI — dashboard visualization
 
 Technical Concepts Applied:
 
@@ -84,15 +145,15 @@ Technical Concepts Applied:
 
 # Dashboard Structure
 
-The final dashboard was designed for operational stakeholders and organized into three main analytical sections.
+The final Power BI dashboard was designed for operational decision-making and organized into three main sections.
 
 ---
 
 # Sales Performance Analysis
 
-This section analyzes revenue generation and customer demand patterns.
+Analyzes revenue generation and customer demand.
 
-Metrics included:
+Key metrics:
 
 - Total Orders
 - Total Sales
@@ -101,12 +162,10 @@ Metrics included:
 
 Additional analysis includes:
 
-- Top selling menu items
-- Revenue distribution by menu category
-- Sales patterns by hour of day
-- Geographic distribution of delivery orders
-
-### Sales Dashboard
+- Top selling items
+- Revenue by category
+- Sales by hour
+- Orders by delivery location
 
 ![Sales Dashboard](images/sales_dashboard.png)
 
@@ -114,18 +173,14 @@ Additional analysis includes:
 
 # Inventory and Cost Control
 
-This section focuses on production costs and ingredient usage.
+Focuses on ingredient consumption and cost drivers.
 
 Analysis includes:
 
-- Total ingredient cost
-- Ingredient consumption by item
+- Ingredient consumption
 - Production cost per pizza
-- Remaining inventory by ingredient
-
-This analysis allows management to identify **cost drivers and inventory risks**.
-
-### Inventory Dashboard
+- Inventory remaining
+- Ingredient cost contribution
 
 ![Inventory Dashboard](images/inventory_dashboard.png)
 
@@ -133,29 +188,16 @@ This analysis allows management to identify **cost drivers and inventory risks**
 
 # Labor and Staffing Analysis
 
-This section evaluates workforce utilization and labor cost distribution.
+Evaluates workforce utilization and labor costs.
 
-Key metrics include:
+Key metrics:
 
 - Total staff hours
 - Total labor cost
 - Hours worked per employee
-- Staff shift schedules
-- Labor cost per employee
-
-This information helps identify opportunities for **staffing optimization and cost management**.
-
-### Labor Dashboard
+- Shift schedules
 
 ![Labor Dashboard](images/labor_dashboard.png)
-
----
-
-# Landing Page
-
-The landing page provides a high-level introduction and navigation to the different analytical sections.
-
-![Landing Page](images/landing_page.png)
 
 ---
 
@@ -163,44 +205,50 @@ The landing page provides a high-level introduction and navigation to the differ
 
 Several operational insights emerged from the analysis.
 
-**Demand Patterns**
+### Demand Patterns
 
-Sales activity peaks during evening hours, indicating that staffing levels should align with dinner service demand.
+Sales peak during evening hours, suggesting staffing should align with dinner demand.
 
-**Product Performance**
+### Product Performance
 
-A small number of menu items generate the majority of revenue, suggesting opportunities for menu optimization.
+A small group of menu items generates most revenue, indicating opportunities for menu optimization.
 
-**Cost Drivers**
+### Cost Drivers
 
-Certain ingredients contribute disproportionately to production costs and should be monitored closely for cost control.
+Certain ingredients contribute disproportionately to production costs.
 
-**Inventory Monitoring**
+### Inventory Monitoring
 
-Inventory tracking allows management to identify ingredients approaching critical stock levels.
+Inventory tracking allows management to detect ingredients approaching critical stock levels.
 
-**Labor Efficiency**
+### Labor Efficiency
 
-Labor cost distribution varies significantly between employees, highlighting opportunities to improve scheduling efficiency.
+Labor cost distribution varies significantly across employees, highlighting scheduling optimization opportunities.
 
 ---
 
 # Repository Structure
+
+```
 restaurant-operations-analytics
-│
-├── README.md
-│
-├── sql
-│ └── operational_queries.sql
-│
-├── dashboard
-│ └── restaurant_operations_dashboard.pbix
-│
-├── images
-│ ├── landing_page.png
-│ ├── sales_dashboard.png
-│ ├── inventory_dashboard.png
-│ └── labor_dashboard.png
+
+README.md
+
+sql
+ operational_queries.sql
+
+dashboard
+ restaurant_operations_dashboard.pbix
+
+images
+ data_pipeline.png
+ sql_code_logic.png
+ sql_sales_view_output.png
+ landing_page.png
+ sales_dashboard.png
+ inventory_dashboard.png
+ labor_dashboard.png
+```
 
 ---
 
@@ -208,12 +256,12 @@ restaurant-operations-analytics
 
 The dataset used for this project is **not publicly available** and therefore is not included in this repository.
 
-The project focuses on demonstrating **SQL-based operational analytics and dashboard development skills** rather than distributing the underlying data.
+This repository focuses on demonstrating **SQL-based operational analytics and dashboard development skills**.
 
 ---
 
 # Author
 
-Juan Pablo Briceno Ramos  
-Business and Data Analyst  
+Juan Pablo Briceño Ramos  
+Business & Data Analyst  
 Toronto, Canada
